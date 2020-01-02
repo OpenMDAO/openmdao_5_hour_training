@@ -220,13 +220,13 @@
 \begin{columns}[T]
     \column{0.5 \textwidth}
         \begin{itemize}
-            \item \textbf{Components} implement the actual model computation
+            \item \small \textbf{Components} implement the actual model computation
         \vspace{0.5cm}
-            \uncover<2->{\item Groups organize the model and enable hierarchical solver strategies}
+            \uncover<2->{\item \small Groups organize the model and enable hierarchical solver strategies}
         \vspace{0.5cm}
-            \uncover<3->{\item Drivers iteritively execute the model (optimizers and DOEs)}
+            \uncover<3->{\item \small Drivers iteritively execute the model (optimizers and DOEs)}
         \vspace{0.5cm}
-            \uncover<4->{\item \textbf{Problem} is the top-level container}
+            \uncover<4->{\item \small \textbf{Problem} is the top-level container}
         \end{itemize}
         
     \column{0.5 \textwidth}
@@ -1005,7 +1005,7 @@
     \end{textblock*}
     
     \begin{textblock*}{3cm}(13cm, 5.5cm)
-        \small \textcolor{red}{$f'(x_{n})$}
+        \small \textcolor{red}{$f(x_{n})$}
     \end{textblock*}
     
     \begin{textblock*}{3cm}(12.8cm, 7.15cm)
@@ -1653,23 +1653,620 @@
 %---------------------------------------------------------------------%
 %---------------------------------------------------------------------%
 
+
 \begin{frame}{OpenMDAO splits total derivative computation into two steps}
 \begin{columns}
     \column[T]{0.4 \textwidth}
         \includegraphics[scale=0.2]{images/slide76.png}
         
     \column[T]{0.6 \textwidth}
-        \begin{itemize}
-            \item Computing the partial derivatives for each component 
-            \item Solving a linear system for total derivatives
-        \end{itemize}
+         1) Computing the partial derivatives for each component \newline \newline
+         2) Solving a linear system for total derivatives
 \end{columns}
     
 \end{frame}
+
+%---------------------------------------------------------------------%
+%---------------------------------------------------------------------%
+
+\begin{frame}{OpenMDAO splits total derivative computation into two steps}
+	\begin{columns}
+		\column[T]{.4 \textwidth}
+			\includegraphics[scale=0.2]{images/slide76.png}
+	
+		\column[T]{.6 \textwidth}
+			\textbf{1) Computing the partial derivatives for each component}
+					\begin{itemize}
+						\item Numerical approach: FD/CS
+						\item Analytic approach: hand derivation or algorithmic differentiation
+						\item Mix and match numerical and analytic
+					\end{itemize}
+			\text{You are responsible for this step,} 
+			\text{but OpenMDAO can help you a bit}
+	\end{columns}
+
+	\begin{tikzpicture}[overlay]
+		\draw[red, very thick, ->] (5.5, 5.5) to (0.2, 4.7);
+		\draw[red, very thick, ->] (5.5, 5.5) to (1.1, 3.3);
+		\draw[red, very thick, ->] (5.5, 5.5) to (2.0, 2.1);
+	\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}{OpenMDAO splits total derivative computation into two steps}
+	\begin{columns}
+		\column[T]{.4 \textwidth}
+			\includegraphics[scale=0.2]{images/slide76.png}
+	
+		\column[T]{.6 \textwidth}
+			1) Computing the partial derivatives for each component \newline \newline
+			\textbf{2) Solving a linear system for total derivatives}
+			\newline \newline
+			OpenMDAO does this automatically using a library of different linear solvers for different problems
+	\end{columns}
+
+	\begin{tikzpicture}[overlay]
+		\draw[blue, ultra thick] (0.1, 4.8) to ( 0.1, 4.1);
+		\draw[blue, ultra thick] (0.1, 4.1) to ( 1, 4.1);
+		\draw[blue, ultra thick] (1, 4.1) to ( 1, 2.8);
+		\draw[blue, ultra thick] (1, 2.8) to ( 2, 2.8);
+		\draw[blue, ultra thick] (2, 2.8) to ( 2, 1.55);
+		\draw[blue, ultra thick] (2, 1.55) to ( 2.8, 1.55);
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}{By using OpenMDAO's analytic derivative functionality you can}
+	\begin{itemize}
+		\item Efficiently solve optimization problems with thousands of design variables or thousands of constraints
+		\item Get total derivatives across a complicated model by providing only partial derivatives of each component
+		\item Mix and match different techniques for computing partial derivatives
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Rules of thumb for computing partials}
+	\begin{itemize}
+		\item Fine to start out with FD partials while getting your model set up!
+		\item For cheap black-box codes:		
+			\begin{itemize}
+				\item FD \textit{might} be ok for production runs
+				\item CS is better if you can do it!
+			\end{itemize}
+		\item For "expensive" codes (anything with an internal solver):
+			\begin{itemize}
+				\item Implement as ImplicitComponent (expose the states/residuals to OpenMDAO)
+				\item Can still FD the residual if you need to
+				\item Analytic derivatives typically cost a lot for these components
+			\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Optimization}
+	Optimization is handled by a \texttt{Driver}
+	\lstinputlisting[language=Python]{SourceCodes/optimization_example.py}
+
+
+	\begin{tikzpicture}[overlay]
+		\draw[red, thick, ->] (8.3, 5) to (4.8, 3.3);
+		\draw[red, thick, ->] (9.1, 3.9) to (7.3, 2.5);
+		\draw[red, thick, ->] (8.5, 2.3) to (7.8, 2);
+		\draw[red, thick, ->] (8.5, 1.5) to (6.5, 1.6);
+		\draw[red, thick, ->] (7.4, .9) to (2.3, .8);
+	\end{tikzpicture}
+
+	\begin{textblock*}{6cm}(9.5cm,4.1cm)
+		\footnotesize \textcolor{red}{ScipyOptimizeDriver is what most people will use on Windows}
+	\end{textblock*}
+	\begin{textblock*}{6cm}(10.1cm,5.3cm)
+		\footnotesize \textcolor{red}{add\_design\_var(\textit{var\_name}, lower=…, upper=…)}
+	\end{textblock*}
+	\begin{textblock*}{6cm}(9.5cm,6.7cm)
+		\footnotesize \textcolor{red}{add\_constraint(\textit{var\_name}, lower=…, upper=…)}
+	\end{textblock*}
+	\begin{textblock*}{6cm}(9.5cm,7.9cm)
+		\footnotesize \textcolor{red}{add\_objective(\textit{var\_name})}
+	\end{textblock*}
+	\begin{textblock*}{6cm}(8.5cm,8.5cm)
+		\footnotesize \textcolor{red}{run\_driver instead of run\_model}
+	\end{textblock*}
+
+\end{frame}
+
+\begin{frame}{Optimization}
+	Available drivers:
+	\begin{itemize}
+		\item \texttt{ScipyOptimizeDriver} will work in Anaconda
+			\begin{itemize}
+				\item Works on Windows machines	
+				\item SLSQP method is the standard constrained optimizer in OpenMDAO
+			\end{itemize}
+		\item \texttt{PyoptSparseDriver} is much better (SNOPT algorithm) but really only builds on Linux/MacOSX (hard to build on 					Windows, but technically possible)
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Recording the optimization history}
+		\begin{itemize}
+			\item Often you will want to record variable values changing over the course of an optimization
+			\item This is achieved using a "recorder" object
+			\item This will record all the objectives, all the constraints, and all the DVs for each optimizer iteration (but no 										"intermediate variables")
+			\item \underline{Can then read in the data to postprocess}
+		\end{itemize}
+\end{frame}
+
+\begin{frame}{Recording the optimization history}
+	\lstinputlisting[language=Python]{SourceCodes/case_recorder_example.py}
+	\begin{tikzpicture}[overlay]
+		\draw[red, thick, ->] (13, 3) to (4.3, .77);
+		\draw[red, thick, ->] (13, 3) to (5, 3.2);
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Saving all the variables for the final optimized point}
+	\begin{columns}
+		\column[T]{.37 \textwidth}
+			\begin{itemize}
+				\item We don't save all the variables for every iteration to avoid huge database files
+				\item This configures a secondary case type to record specific runs with all the variables
+			\end{itemize}
+		\column[T]{.63 \textwidth}
+			\lstinputlisting[language=Python]{SourceCodes/case_recorder_example.py}
+	\end{columns}
+
+	\begin{tikzpicture}[overlay]
+		\draw[red, thick, ->] (4.8, 2) to (5.5, 2.5);
+		\draw[red, thick, ->] (4.8, 2) to (5.5, .5);
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Lab \#2: Optimization of a cantilever beam}
+	\begin{columns}
+		\column[T]{.4 \textwidth}
+			\begin{itemize}
+				\item Find the thickness distribution for a cantilever beam that minizes compliance subject to a volumn constraint
+				\item Check out the other examples on your own!
+			\end{itemize}
+		\column[T]{.6 \textwidth}
+			\includegraphics[scale=0.5]{images/beam_docs.png}
+			\includegraphics[scale=0.5]{images/cantilever_beam.png}
+	\end{columns}
+	
+	\begin{tikzpicture}[overlay]
+		\draw[red, thick, ->] (5, 2) to (6.6, 2.94);
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Lab \#2: Simple FEM in 5 steps!}
+	\begin{columns}
+		\column[T]{.55 \textwidth}
+			\begin{itemize}
+				\item \small Break the beam into segments (0 doesn't count as a real step!)
+				\item \small Compute each moment of inertia
+				\item \small Compute the local stiffness matrix for each segment
+				\item \small Combine all the local stiffness matrices into a global K matrix and solve the FEM
+				\item \small Pull displacements from the state vector and compute compliance
+				\item \small Compute beam volume
+			\end{itemize}
+		\column[T]{.45 \textwidth}
+			\includegraphics[scale=0.38]{images/slide_105.png}
+			\uncover<2->{
+				\small using the \texttt{src\_indices} argument to the connect method can extract the relevant portion of the state vector
+			}
+	\end{columns}
+
+	\uncover<2->{
+		\begin{tikzpicture}[overlay]
+			\draw[red, thick, ->] (6.75, 1.5) to (12, 3.4);
+			\draw[red, thick, ->] (6.75, 1.5) to (13.15, 3.7);
+			\draw[red, thick] (.5, .7) to (6.6, .7);
+			\draw[red, thick] (6.6, .7) to (6.6, 1.7);
+			\draw[red, thick] (6.6, 1.7) to (.5, 1.7);
+			\draw[red, thick] (.5, 1.7) to (.5, .7);
+		\end{tikzpicture}
+	}
+\end{frame}
+
+\begin{frame}{Lab \#2: Get to it!}
+	\begin{columns}
+		\column[T]{.5 \textwidth}
+			\begin{itemize}
+				\item \small Copy the "\texttt{lab\_2\_template.py}" file to a new file called "\texttt{lab\_2.py}"
+				\item \small Add components in the correct order (~line 40)
+				\item \small Connect the components together (~line 48)
+				\item \small Use the N2 diagram to make sure you have everything connected (no red inputs!)
+			\end{itemize}
+		\column[T]{.5 \textwidth}
+			\begin{itemize}
+				\item \small What happens if you switch to full model FD? Does it work? Try changing the FD step size...
+				\item \small What about complex step?
+				\item \small How does compute cost scale with \texttt{num\_elements} for different methods of computing derivatives?
+				\item \small What happens if you add the components in the incorrect order?
+			\end{itemize}
+	\end{columns}
+\end{frame}
+
+\begingroup
+\setbeamercolor{background canvas}{bg=GreenYellow}
+\begin{frame}{Wrapping external codes}
+	\begin{itemize}
+		\item How to handle file wrappers with OpenMDAO's built in helper components
+		\item Lab 3: Explicit and Implicit file wrappers
+	\end{itemize}
+\end{frame}
+\endgroup
+
+\begin{frame}{OpenMDAO has two file wrapper components in the standard library}
+	\begin{columns}
+		\column[T]{.33 \textwidth}
+			\begin{itemize}
+				\item \small There are lots of useful components in the standard library!
+				\item \small Spines, constraint aggregation, \textbf{file wrappers}, Ax=b, Ax, etc.
+				\item \small Have a look through these comps so you know what's there
+			\end{itemize}
+		\column[T]{.34 \textwidth}
+			\includegraphics[scale=.5]{images/slide_109a.png}
+		\column[T]{.33 \textwidth}
+			\includegraphics[scale=.5]{images/slide_109b.png}
+	\end{columns}
+
+\end{frame}
+
+\begin{frame}{ExternalCodeComp}
+	\begin{figure}
+		\includegraphics[scale=.5]{images/slide_110.png}
+	\end{figure}
+	
+	\begin{tikzpicture}[overlay]
+		\draw[red, thick, ->] (8.3, 6) to (7.3, 6.6);
+		\draw[red, thick, ->] (8.5, 2.6) to (7.4, 2.4);
+		\draw[red, thick, ->] (9.5, 2) to (9, 2);
+		\draw[red, thick, ->] (8.5, 1.2) to (6.5, 1.2);
+	\end{tikzpicture}
+
+	\tikz[overlay]
+		\draw [red,thick,decorate,decoration={brace,amplitude=4pt,mirror,raise=4pt},yshift=0pt]
+		(3.12,7.05) -- (3.12,6.3) node [midway,xshift=4.45cm] {};
+	\tikz[overlay]
+		\draw [red,thick,decorate,decoration={brace,amplitude=10pt,mirror,raise=4pt},yshift=0pt]
+		(2.8,6.3) -- (2.8,4.4) node [midway,xshift=4.45cm] {};
+
+	\begin{textblock*}{6cm}(0cm,2.9cm)
+		\footnotesize \textcolor{red}{Define the I/O like normal}
+	\end{textblock*}
+	\begin{textblock*}{6cm}(0cm,4.1cm)
+		\footnotesize \textcolor{red}{Wrapper specific options}
+	\end{textblock*}
+	\begin{textblock*}{6cm}(.7cm,8.2cm)
+		\footnotesize \textcolor{red}{Push the values back \newline into OpenMDAO's output vector}
+	\end{textblock*}
+	\begin{textblock*}{6cm}(9.4cm,3.4cm)
+		\footnotesize \textcolor{red}{Inherit from OpenMDAO provided class}
+	\end{textblock*}
+	\begin{textblock*}{6cm}(9.5cm,6.7cm)
+		\footnotesize \textcolor{red}{Write the input file}
+	\end{textblock*}
+	\begin{textblock*}{6cm}(10.5cm,7.2cm)
+		\footnotesize \textcolor{red}{Create a sub-process to run the code}
+	\end{textblock*}
+	\begin{textblock*}{6cm}(9.5cm,8.0cm)
+		\footnotesize \textcolor{red}{Parse the output file}
+	\end{textblock*}1
+
+\end{frame}
+
+\begin{frame}{ExternalCodeImplicitComp}
+	\begin{figure}
+		\includegraphics[scale=.43]{images/slide_111.png}
+	\end{figure}
+	
+	\begin{tikzpicture}[overlay]
+		\draw[red, thick, ->] (8.3, 6.4) to (7.3, 7.0);
+		\draw[red, thick, ->] (9.5, 3.6) to (8, 3.9);
+		\draw[red, thick, ->] (10, 3.2) to (9.6, 3.2);
+		\draw[red, thick, ->] (9.5, 2.4) to (8, 2.6);
+	\end{tikzpicture}
+	
+	\tikz[overlay]
+		\draw [red,thick,decorate,decoration={brace,amplitude=5pt,mirror,raise=4pt},yshift=0pt]
+		(4.12,7.15) -- (4.12,6.7) node [midway,xshift=4.45cm] {};
+	\tikz[overlay]
+		\draw [red,thick,decorate,decoration={brace,amplitude=7pt,mirror,raise=4pt},yshift=0pt]
+		(4.1,6.6) -- (4.1,4.7) node [midway,xshift=4.45cm] {};
+	\tikz[overlay]
+		\draw [red,thick,decorate,decoration={brace,amplitude=7pt,mirror,raise=4pt},yshift=0pt]
+		(3.95,4.6) -- (3.95,3.0) node [midway,xshift=4.45cm] {};
+	\tikz[overlay]
+		\draw [red,thick,decorate,decoration={brace,amplitude=7pt,mirror,raise=4pt},yshift=0pt]
+		(3.8,2.9) -- (3.8,1.3) node [midway,xshift=0cm] {};
+
+	\begin{textblock*}{6cm}(1.4cm, 3.3cm)
+		\scriptsize \textcolor{red}{Define the I/O like normal}
+	\end{textblock*}
+	\begin{textblock*}{6cm}(1.7cm, 4.5cm)
+		\scriptsize \textcolor{red}{Wrapper specific options}
+	\end{textblock*}
+	\begin{textblock*}{6cm}(.7cm,6.5cm)
+		\scriptsize \textcolor{red}{apply\_nonlinear is the Residual \newline evaluation}
+	\end{textblock*}
+	\begin{textblock*}{6cm}(.7cm,8cm)
+		\scriptsize \textcolor{red}{solve\_nonlinear asks the code to \newline converge itself using its own \newline internal solvers}
+	\end{textblock*}
+	\begin{textblock*}{6cm}(9.4cm, 3cm)
+		\scriptsize \textcolor{red}{Inherit from OpenMDAO provided class (different base class than for the explicit case!)}
+	\end{textblock*}
+	\begin{textblock*}{6cm}(10.5cm, 6cm)
+		\scriptsize \textcolor{red}{Write the input file}
+	\end{textblock*}
+	\begin{textblock*}{6cm}(11cm, 6.5cm)
+		\scriptsize \textcolor{red}{Create a sub-process to run the code}
+	\end{textblock*}
+	\begin{textblock*}{6cm}(10.5cm, 7.3cm)
+		\scriptsize \textcolor{red}{Parse the output file}
+	\end{textblock*}
+\end{frame}
+
+\begin{frame}{Lab \#3: Beam optimization with file wrapped external codes}
+	\begin{itemize}
+		\item \small cd into the "lab\_3" folder
+		\item \small Have a quick look at standalone\_beam.py \newline this is a pure python version of the same FEM you built in 					OpenMDAO for Lab \#2 (but without derivatives)
+		\item \small Call "\texttt{python standalone\_beam.py opt}" from the command line
+		\item \small Call "\texttt{python lab\_3\_explicit\_wrapper.py}"
+		\item \small Call "\texttt{python lab\_3\_implicit\_wraper.py}"
+		\item \small Why does the implicit wrapper call both solve\_nonlinear and apply\_nonlinear (hint\: it has to do with derivatives)
+		\item \small Compare the compute cost of running the optimization using pure OpenMDAO, the standalone optimization, and the 				file wrapped version
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Advanced Topics}
+	\begin{itemize}
+		\item Model architecting
+		\item Vectorization
+		\item Implicit components
+		\item Getting system derivatives efficiently
+		\item High-fidelity and expensive tools
+		\item Debugging tools and processes
+		\item Surrogate modeling
+		\item Trajectory optimization
+		\item Propulsion analysis
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Model architecting}
+	\begin{itemize}
+		\item Developing good OpenMDAO models is like object-oriented software engineering: you need to pick the right level to draw 				the component boundary
+		\item In my opinion, a good component has:
+			\begin{itemize}
+				\item on the order of 5 - 20 inputs
+				\item 1 - 20 outputs
+				\item a few computations that are logically related
+			\end{itemize}
+		\item Python's package import system makes this easy
+		\item Real\-world examples:
+			\begin{itemize}
+				\item \url{https://github.com/mdolab/OpenConcept}
+				\item \url{https://github.com/mdolab/OpenAeroStruct}
+			\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Model architecting example}
+	\includegraphics[scale=.49]{images/slide_115.png}
+\end{frame}
+
+\begin{frame}{Vectorization}
+	\begin{itemize}
+		\item Where possible, avoid instantiating models over and over for multi-point analyses (e.g. trajectory optimization)
+		\item Instead, do vectorized computations using numpy
+		\item OpenMDAO needs to know the dimension of all component inputs/outputs at \texttt{setup()} time
+			\begin{itemize}
+				\item Best practice: pass in vector length as a \texttt{self.option['vec\_size']}
+				\item If you mess this up you'll get dimension mismatch errors at run time
+			\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Vectorization}
+	\begin{figure}
+		\includegraphics[scale=.5]{images/slide_117.png}
+	\end{figure}
+
+	\begin{textblock*}{6cm}(8.7cm, 2.7cm)
+		\footnotesize \textcolor{red}{User sets vector dimensions when instantiating the model}
+	\end{textblock*}
+	\begin{textblock*}{6cm}(9.7cm, 4.3cm)
+		\footnotesize \textcolor{red}{shape=(dim1, dim2, ...)}
+	\end{textblock*}
+	\begin{textblock*}{6cm}(10cm, 6.0cm)
+		\footnotesize \textcolor{red}{Sparse Jacobian indices for vector input and vector output}
+	\end{textblock*}
+	\begin{textblock*}{6cm}(.6cm, 8.3cm)
+		\footnotesize \textcolor{red}{Sparse Jacobian indices for \newline scalar input and vector output}
+	\end{textblock*}
+
+	\begin{tikzpicture}[overlay]
+		\draw[red, thick, ->] (8.6, 4.6) to (8.7, 3.8);
+		\draw[red, thick, ->] (10.9, 2.1) to (11, 1.7);
+		\draw[red, thick, ->] (4.1, .4) to (4.6, .45);
+	\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}{Vectorization}
+	\begin{figure}
+		\includegraphics[scale=.5]{images/slide_118.png}
+	\end{figure}
+	
+	\begin{textblock*}{6cm}(1cm, 8cm)
+		\footnotesize \textcolor{red}{Many flight conditions computed at once using vectorized computation}
+	\end{textblock*}
+	
+	\begin{tikzpicture}[overlay]
+		\draw[red, thick, ->] (2.6, 0) to (4.5, .6);
+	\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}{Implicit Components}
+	\begin{itemize}
+		\item Useful for computations where there isn't an easily written explicit expression
+			\begin{itemize}
+				\item y is a state and x, z are inputs: \[ \cos(x * y) - x * y = 0 \] 
+				\item CFD or FEA analyses
+			\end{itemize}
+		\item You compute the residuals for the states instead of the outputs directly
+		\item Implicit components always require a solver
+	\end{itemize}
+	\url{http://openmdao.org/twodocs/versions/latest/advanced_guide/implicit_comps/defining_icomps.html}
+\end{frame}
+
+\begin{frame}{Getting system derivatives efficiently: automatic Jacobian coloring}
+	\begin{figure}
+		\includegraphics[scale=0.3]{images/slide_120.png}
+	\end{figure}
+	\url{http://openmdao.org/twodocs/versions/latest/features/core_features/working_with_derivatives/simul_derivs.html}
+\end{frame}
+
+\begin{frame}{Getting system derivatives efficiently: automatic Jacobian coloring}
+	\begin{figure}
+		\includegraphics[scale=0.45]{images/slide_121.png}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{High-fidelity and expensive tools}
+	\begin{itemize}
+		\item OpenMDAO can handle a mix of fidelity levels easily
+		\item Can parallelize at the group or subgroup level
+		\item Only requiring the partial derivatives becomes quite important here
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{High-fidelity and expensive tools}
+	\begin{figure}
+		\includegraphics[scale=0.4]{images/slide_123.png}
+	\end{figure}
+\end{frame}
+			
+\begin{frame}{High-fidelity and expensive tools}
+	\begin{figure}
+		\includegraphics[scale=.45]{images/slide_124.png}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{High-fidelity and expensive tools}
+	\begin{figure}
+		\includegraphics[scale=0.38]{images/slide_125.png}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Debugging tools}
+	Many tools come pre-packaged in OpenMDAO to help you develop, debug, and run your models
+	\begin{itemize}
+		\item N2
+		\item Connection viewer
+		\item Speed and memory profiling
+		\item Call tracing
+	\end{itemize}
+	\url{http://openmdao.org/twodocs/versions/latest/other/om_command.html}
+\end{frame}
+
+\begin{frame}{Connection viewer: openmdao view\_connections \texttt{file}.py}
+	\begin{figure}
+		\includegraphics[scale=.425]{images/slide_127.png}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Speed and memory profiling: openmdao iprof \texttt{file}.py}
+	\begin{figure}
+		\includegraphics[scale=.4]{images/slide_128.png}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Call tracing: openmdao call\_tree \texttt{file}.py}
+	\begin{figure}
+		\includegraphics[scale=.6]{images/slide_129.png}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Surrogate modleing}
+	Built-in methods for structured and unstructured data interpolation
+	\begin{itemize}
+		\item Kriging surrogate
+		\item Nearest neighbor
+		\item Response surface
+	\end{itemize}
+	
+	\url{http://openmdao.org/twodocs/versions/latest/features/building_blocks/components/metamodelunstructured_comp.html}
+
+\end{frame}
+
+\begin{frame}{Surrogate modeling}
+	\begin{figure}
+		\includegraphics[scale=.39]{images/slide_131.png}
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\begin{columns}
+		\column[T]{.5 \textwidth}
+			\begin{itemize}
+				\item \textit{Dymos} is a tool build using OpenMDAO that solves optimal control problems involving multidisciplinary systems
+				\item Example optimal trajectory for an aircraft climb shown on right
+			\end{itemize}
+			\url{http://github.com/openmdao/dymos}
+		\column[T]{.5 \textwidth}
+			\includegraphics[scale=.4]{images/slide_132}
+	\end{columns}
+\end{frame}
+			
+\begin{frame}{Propulsion optimization: PyCycle}
+	\begin{figure}
+		\includegraphics[scale=.4]{images/slide_133.png}
+	\end{figure}
+	\url{https://github.com/openmdao/pycycle}
+\end{frame}
+
+\begin{frame}{Recap of today's activities}
+	\begin{itemize}
+		\item OpenMDAO intro and basics
+			\begin{itemize}
+				\item Lab 0: Explicit components and connections
+			\end{itemize}
+		\item Using solvers with implicit models
+			\begin{itemize}
+				\item Lab 1: Comparing gradient-free and gradient-based solvers
+			\end{itemize}
+		\item Optimization with and without analytic derivatives
+			\begin{itemize}
+				\item Lab 2: Optimizing the thickness distribution of a simple beam
+			\end{itemize}
+		\item Wrapping external codes
+			\begin{itemize}
+				\item Lab 3: Wrapping external codes as explicit and implicit components
+			\end{itemize}
+		\item Advanced topics
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Thank you!}
     
+	Subscribe to MDO Lab e-mail uptdates by sending a blank e-mail to: \newline
+	\url{engopt-join@mdolab.engin.umich.edu}
+	\newline
+	\url{http://mdolab.engin.umich.edu/}
+
+    \tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(4,3.3)$) {\includegraphics[scale=0.4]{images/michigan_aerospace.png}};
+
+    \tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(-4,3.25)$) {\includegraphics[scale=0.4]{images/NTNU_logo.png}};
+
+\end{frame}
 
 
+\begin{frame}{Thank you!}
 
+    \tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(0,1)$) {\includegraphics[scale=.35]{images/slide_135.png}};
 
+    \tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(4,3.3)$) {\includegraphics[scale=0.4]{images/michigan_aerospace.png}};
+
+    \tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(-4,3.25)$) {\includegraphics[scale=0.4]{images/NTNU_logo.png}};
+
+\end{frame}
 
 \end{document}
