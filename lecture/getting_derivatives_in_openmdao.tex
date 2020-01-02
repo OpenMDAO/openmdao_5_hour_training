@@ -683,6 +683,323 @@
 	
 	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(0, 1.12)$) {\includegraphics[scale=.485]{images/slide_37_derivatives.png}};
 	
-\end{frame}                                                                                                                                               
+\end{frame}         
+
+\begin{frame}{Sparse partial derivatives can greatly increase speed}
+
+	We saw an 80x speed-up by using sparse JAcobians intelligently in OpenAeroStruct \newline \newline
+	
+	\begin{figure}
+		\includegraphics[scale=.5]{images/slide_38_derivatives.png}
+	\end{figure}
+	
+\end{frame}   
+
+\begin{frame}{Since each partial is diagonal, we don't actually need to provide all those 0's}
+
+	$$
+	\large [J] = 
+	\begin{bmatrix}
+		\frac{\partial L}{\partial V} & \frac{\partial L}{\partial C_L} & \frac{\partial L}{\partial \rho} & \frac{\partial L}{\partial S_{ref}}
+	\end{bmatrix}
+	$$	
+	
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(3.25, 3.0)$) {\includegraphics[scale=.24]{images/slide_35a_derivatives.png}};
+		
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(.75, 3.0)$) {\includegraphics[scale=.24]{images/slide_35b_derivatives.png}};
+	
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(-1.75, 3.0)$) {\includegraphics[scale=.24]{images/slide_35c_derivatives.png}};
+				
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(-3.75, 3.0)$) {\includegraphics[scale=.24]{images/slide_35d_derivatives.png}};
+	
+	\begin{tikzpicture}[overlay]
+		\draw[red, thick, ->] (3.75, 1) to (6, 3);
+		\draw[red, thick, ->] (6.25, 1) to (7, 3);
+		\draw[red, thick, ->] (8.75, 1) to (8, 3);
+		\draw[red, thick, ->] (10.75, 1) to (9, 3);
+	\end{tikzpicture}
+	
+\end{frame}     
+
+\begin{frame}{Since each partial is diagonal, we don't actually need to provide all those 0's}
+
+	$$
+	\large [J] = 
+	\begin{bmatrix}
+		\frac{\partial L}{\partial V} & \frac{\partial L}{\partial C_L} & \frac{\partial L}{\partial \rho} & \frac{\partial L}{\partial S_{ref}}
+	\end{bmatrix}
+	$$	
+	
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(3.25, 3.0)$) {\includegraphics[scale=.24]{images/slide_40a_derivatives.png}};
+		
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(.75, 3.0)$) {\includegraphics[scale=.24]{images/slide_40b_derivatives.png}};
+	
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(-1.75, 3.0)$) {\includegraphics[scale=.24]{images/slide_40c_derivatives.png}};
+				
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(-3.75, 3.0)$) {\includegraphics[scale=.24]{images/slide_40d_derivatives.png}};
+	
+	\begin{tikzpicture}[overlay]
+		\draw[red, thick, ->] (3.75, 0) to (6, 3);
+		\draw[red, thick, ->] (6.25, 0) to (7, 3);
+		\draw[red, thick, ->] (8.75, 0) to (8, 3);
+		\draw[red, thick, ->] (10.75, 0) to (9, 3);
+	\end{tikzpicture}
+	
+\end{frame} 
+
+\begin{frame}
+
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(0, 0)$) {\includegraphics[scale=.52]{images/slide_41_derivatives.png}};
+		
+	\begin{textblock*}{10cm}(6.5cm, 7.5cm)
+		\textcolor{white}{\footnotesize Tell OpenMDAO about the sparsity pattern of the Jacobian}
+	\end{textblock*}
+	
+	\begin{tikzpicture}[overlay]
+		\draw[white, thick, ->] (13, -3.1) to (10, -3.1);
+	\end{tikzpicture}
+
+\end{frame}     
+
+\begin{frame}
+
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(0, 0)$) {\includegraphics[scale=.52]{images/slide_42_derivatives.png}};
+		
+	\begin{textblock*}{4.5cm}(9cm, 5.0cm)
+		\textcolor{white}{\footnotesize Because our expected partials shapes are vectors, now we're just giving OpenMDAO the non-zero entries}
+	\end{textblock*}
+
+\end{frame}      
+
+\begin{frame}{What if we're too lazy to compute the partials by hand?}
+
+	$$
+	\large [J] = 
+	\begin{bmatrix}
+		\frac{\partial L}{\partial V} & \frac{\partial L}{\partial C_L} & \frac{\partial L}{\partial \rho} & \frac{\partial L}{\partial S_{ref}}
+	\end{bmatrix}
+	$$	
+	
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(3.25, 3.0)$) {\includegraphics[scale=.24]{images/slide_35a_derivatives.png}};
+		
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(.75, 3.0)$) {\includegraphics[scale=.24]{images/slide_35b_derivatives.png}};
+	
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(-1.75, 3.0)$) {\includegraphics[scale=.24]{images/slide_35c_derivatives.png}};
+				
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(-3.75, 3.0)$) {\includegraphics[scale=.24]{images/slide_35d_derivatives.png}};
+	
+	\begin{tikzpicture}[overlay]
+		\draw[red, thick, ->] (3.75, 1) to (6, 3);
+		\draw[red, thick, ->] (6.25, 1) to (7, 3);
+		\draw[red, thick, ->] (8.75, 1) to (8, 3);
+		\draw[red, thick, ->] (10.75, 1) to (9, 3);
+	\end{tikzpicture}
+	
+\end{frame}    
+
+\begin{frame}
+
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(0, 0)$) {\includegraphics[scale=.49]{images/slide_44_derivatives.png}};
+		
+	\begin{textblock*}{4.5cm}(9.3cm, 6.0cm)
+		\textcolor{white}{\footnotesize OpenMDAO can approximate derivatives automatically. \newline Just note that they will be dense!}
+	\end{textblock*}
+	
+	\begin{tikzpicture}[overlay]
+		\draw[white, thick, ->] (11, -.6) to (7.6, -.6);
+	\end{tikzpicture}
+
+\end{frame}      
+
+\begin{frame}{Rules of thumb for computing partials}
+
+	\begin{itemize}
+		\item Fine to start out with FD partials while getting your model set up!
+		\item For cheap black-box codes:
+		\begin{itemize}
+			\item FD \textit{might} be ok for production runs
+			\item CS is better if you can do it!
+		\end{itemize}
+		\item For ``expensive'' codes (anything with an internal solver)
+		\begin{itemize}
+			\item Implement as ImplicitComponent (expose the states/residuals to OpenMDAO)
+			\item Can still FD the residual if you need to
+			\item Analytic derivatives typically cost a lot for these components
+		\end{itemize}
+	\end{itemize}
+	
+\end{frame}      
+
+\begingroup
+\setbeamercolor{background canvas}{bg=GreenYellow}
+\begin{frame}{Computing partial derivatives of an ImplicitComponent}    
+	
+	\begin{itemize}
+		\item Can use the same techniques to obtain partials as explicit
+		\item Compute the partials of the \textbf{residuals} with respect to the inputs and outputs
+		\item Under the ``implicit\_examples'' folder in the repo
+	\end{itemize}
+
+\end{frame}
+\endgroup    
+
+\begin{frame}{When do we need to use implicit components?}   
+
+	\begin{itemize}
+		\item For computations where there is not an explicit analytic solution, such as CFD or FEA analyses or $$ \cos{x*y} - z*y = 0 $$
+		\item The states are your outputs and you compute residuals for them instead of their analytic solution
+		\item Implicit componenets always require a solver
+	\end{itemize}
+	\url{http://openmdao.org/twodocs/versions/latest/advanced_guide/implicit_comps/defining_icomps.html}
+	
+\end{frame}  
+
+\begin{frame}{Implicit components can use any of the derivative techniques described previously}
+
+	\begin{itemize}
+		\item Hand derived analytic partials (sparse or dense!)
+		\item Finite-difference or complex-step dense approximations
+	\end{itemize}
+
+\end{frame}     
+
+\begin{frame}{Example implicit component: Aircraft in flight equilibrium}
+
+	\begin{columns}
+		\column[T]{.6\textwidth}
+			\includegraphics[scale=.46]{images/slide_49_derivatives.png}
+		\column[T]{.4\textwidth}
+				$$ F_T \cos{\alpha} - D - W \sin{\gamma} = 0 $$
+				$$ F_T \sin{\alpha} + L - W \cos{\gamma} = 0 $$
+	\end{columns}
+
+\end{frame}    
+
+\begin{frame}
+
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(0, 0)$) {\includegraphics[scale=.565]{images/slide_50_derivatives.png}};
+		
+	\begin{textblock*}{9.5cm}(3.3cm, 7.8cm)
+		\textcolor{black}{Define resiiduals (i.e. the values we want to drive to 0)}
+	\end{textblock*}
+	\begin{textblock*}{4.5cm}(9.3cm, 4.2cm)
+		\textcolor{white}{\footnotesize $$ F_T \cos{\alpha} - D - W \sin{\gamma} = 0 $$ $$ F_T \sin{\alpha} + L - W \cos{\gamma} = 0 $$}
+	\end{textblock*}
+
+\end{frame}        
+
+\begin{frame}
+
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(0, 0)$) {\includegraphics[scale=.51]{images/slide_51_derivatives.png}};
+		
+	\begin{textblock*}{5.5cm}(8cm, 2.0cm)
+		\textcolor{white}{Compute partial derivatives of the residuals with respect to the inputs}
+	\end{textblock*}
+
+\end{frame} 
+
+\begin{frame}{Advanced topics related to obtaining derivatives}
+
+	\begin{itemize}
+		\item Partial and total derivative coloring
+		\item Parallel finite difference and complex step
+		\item Debugging derivative computations
+	\end{itemize}
+	
+\end{frame}    
+
+\begin{frame}{OpenMDAO docs have a great amount of details and examples}
+
+	\begin{columns}
+		\column[T]{.5\textwidth}
+			Search bar is a lifesaver
+			\newline \newline \newline \newline \url{http://openmdao.org/twodocs/versions/latest/features/core_features/working_with_derivatives/index.html}
+		\column[T]{.5\textwidth}
+			\includegraphics[scale=.37]{images/slide_24_derivatives.png}
+	\end{columns}
+
+\end{frame} 
+
+\begin{frame}{Getting system derivatives efficiently: automatic Jacobian coloring}
+	\begin{figure}
+		\includegraphics[scale=0.35]{images/slide_120.png}
+	\end{figure}
+	\url{http://openmdao.org/twodocs/versions/latest/features/core_features/working_with_derivatives/simul_derivs.html}
+\end{frame} 
+
+\begin{frame}{Automatic coloring for real problems can be extremely beneficial}
+
+	\begin{columns}
+		\column[T]{.5\textwidth}
+			Designers don't need prior knowledge about the sparsity of their optimization problem to use total coloring
+		\column[T]{.5\textwidth}
+			\includegraphics[scale=.37]{images/slide_55_derivatives.png}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Visual debugging tools for partial derivatives are helpful for sparse patterns}
+	
+	\includegraphics[scale=.5]{images/slide_56_derivatives.png}
+
+\end{frame}     
+
+\begin{frame}{Getting system derivatives efficiently: automatic Jacobian coloring}
+
+	\begin{figure}
+		\includegraphics[scale=.36]{images/slide_57_derivatives.png}
+	\end{figure}
+	Gray, Hearn, and Naylor, Using graph coloring to compute total derivatives more efficiently in OpenMDAO, AIAA 2019-3108
+	
+\end{frame}
+
+\begin{frame}{Coloring can also be used for \underline{partial} derivatives, though it is experimental}
+
+	\begin{figure}
+		\includegraphics[scale=.41]{images/slide_58_derivatives}
+	\end{figure}
+	\url{http://openmdao.org/twodocs/versions/latest/features/experimental/simul_coloring_fd_cs.html}
+
+\end{frame}
+
+\begin{frame}
+
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(0, 0)$) {\includegraphics[scale=.53]{images/slide_59_derivatives.png}};
+		
+	\begin{textblock*}{5.0cm}(10.7cm, 7.0cm)
+		\textcolor{white}{\footnotesize Can use partial derivative coloring to speed up approximation time}
+	\end{textblock*}
+
+\end{frame}
+
+\begin{frame}{Approximated colored sparse derivatives can save you order of magnitude computation}
+
+	\begin{figure}
+		\includegraphics[scale=.41]{images/slide_60_derivatives.png}
+	\end{figure}
+
+\end{frame}
+
+\begin{frame}{Try out these derivative features and suggest others that might be useful}
+
+	\begin{itemize}
+		\item Let the developement team know what works and what doesn't
+		\item Submit a POEM if you want to see changes
+	\end{itemize}
+
+\end{frame}
+
+\begingroup
+\setbeamercolor{background canvas}{bg=Black}
+\begin{frame}[plain]{}
+
+\end{frame}
+\endgroup
+
+\begin{frame}{Download these slides and tutorial scripts from GitHub}
+
+	\url{https://github.com/openmdao/openmdao_training}
+	\newline \newline Our materials for today are in the ``getting\_derivatives\_in\_openmdao'' folder
+	
+\end{frame}                        
 
 \end{document}
