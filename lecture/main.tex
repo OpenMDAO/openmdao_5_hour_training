@@ -33,9 +33,9 @@
     
     \maketitle
 
-    \tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(5,1)$) {\includegraphics[scale=0.15]{images/frong2.png}};
+    \tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(5,1.12)$) {\includegraphics[scale=0.15]{images/frong2.png}};
 
-    \tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(-5,1)$) {\includegraphics[scale=0.17]{images/front1.png}};
+    \tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(-5,1.12)$) {\includegraphics[scale=0.17]{images/front1.png}};
 
     \tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(0,-3.7)$) {\includegraphics[scale=0.24]{images/omdao.png}};
 
@@ -67,11 +67,11 @@
 
 \begin{frame}{OpenMDAO is an open-source framework for efficient MDAO}
     \begin{itemize}
-        \item Developed and supported a team at NASA Glenn since 2008
+        \item Developed and supported by a team at NASA Glenn since 2008
         \vspace{0.5cm}
         \item Apache 2.0 license is very permissive (no “copyleft”)
         \vspace{0.5cm}
-        \item Fast enough for high-fidelity, expensive problems but easy enough for cheap conceptual models
+        \item Fast enough for high-fidelity expensive problems, but easy enough for cheap conceptual models
         \vspace{0.5cm}
         \item Can be used as a framework, or a low level library for building stand alone codes
     \end{itemize}
@@ -135,24 +135,27 @@
           \begin{itemize}
             \item Lab 0: Explicit components and connections
           \end{itemize}
-    \vspace{.5cm}
+		\vspace{0.25cm}
     
         \item Using solvers with implicit models
           \begin{itemize}
             \item Lab 1: Comparing gradient-free and gradient-based solvers
           \end{itemize}
-    \vspace{.5cm}
+		\vspace{0.25cm}
     
         \item Optimization with and without analytic derivatives
           \begin{itemize}
               \item Lab 2: Optimizing the thickness distribution of a simple beam
           \end{itemize}
-    \vspace{.5cm}
+		\vspace{0.25cm}
     
         \item Wrapping external codes
           \begin{itemize}
               \item Lab 3: Wrapping external codes as explicit and implicit components
           \end{itemize}
+		\vspace{0.25cm}
+
+		\item Getting derivatives in OpenMDAO
     \end{itemize}
     
 \end{frame}
@@ -205,7 +208,7 @@
         \item Derivative computation (for gradient-based opt.)
         \begin{itemize}
             \item Forward and reverse analytic
-            \item Finite difference or complex step
+            \item Finite-difference or complex-step
             \item Mixture of all!
             \end{itemize}
 \pause
@@ -252,8 +255,8 @@
         \begin{tikzpicture}[overlay]
             % \draw (2.9, -2) node [inner sep=0] {\uncover<1->{\includegraphics[scale=0.2]{images/arch1.png};}};
             \draw (2.9, -2) node [inner sep=0] {\includegraphics[scale=0.2]{images/arch1.png}};
-            \draw [blue, ultra thick] (4.8,-2.7) circle (0.65cm);
-            \draw[blue, very thick] (-2,1.3) -- (4.2, -2.5);
+            \draw [red, ultra thick] (4.8,-2.7) circle (0.65cm);
+            \draw[red, very thick] (-2,1.3) -- (4.2, -2.5);
         \end{tikzpicture}
   \end{columns}
  
@@ -296,7 +299,7 @@
         \end{tikzpicture}
  
         \begin{textblock*}{7cm}(8.5cm,2.2cm)
-            \footnotesize \textcolor{red}{Define model inputs, output, and (optionally)\\partial derives using the setup() method.\\Called once before solve / optimization}
+            \footnotesize \textcolor{red}{Define model inputs, outputs, and (optionally)\\partial derives using the setup() method.\\Called once before solve / optimization}
         \end{textblock*}
   }
  
@@ -377,7 +380,7 @@
     \column[T]{0.5\textwidth}
         \includegraphics[scale=0.2]{images/arch1.png}
         \begin{tikzpicture}[overlay]
-            \draw [blue, ultra thick] (-4.75,2) circle (0.55cm);
+            \draw [red, ultra thick] (-4.75,2) circle (0.55cm);
       \end{tikzpicture}
     \end{columns}
     
@@ -396,13 +399,13 @@
             \draw[red,very thick,<-](3.9,6.35) to (6.7,6.25);
         \end{tikzpicture}
 
-        \begin{textblock*}{5cm}(8.3cm,7cm)
+        \begin{textblock*}{5cm}(8.3cm,7.2cm)
             \footnotesize \textcolor{red}{This is the model structure that is being connected}
         \end{textblock*} 
     
         \begin{tikzpicture}[overlay]        % Curly brace
             \draw [red, very thick,decorate,decoration={brace,amplitude=10pt,mirror,raise=4pt},yshift=0pt]
-            (6.2,2.3) -- (6.2,3.9) node [midway,xshift=3cm] {\footnotesize $\includegraphics[scale=0.2]{images/explicit_box.png}$};
+            (6.2,2.) -- (6.2,3.5) node [midway,xshift=3cm] {\footnotesize $\includegraphics[scale=0.2]{images/explicit_box.png}$};
         \end{tikzpicture}
     }
     
@@ -418,7 +421,7 @@
         \end{tikzpicture}
 
         \begin{textblock*}{5cm}(9.5cm,3.7cm)
-            \footnotesize \textcolor{red}{Include components using the add\_subsystem (name, component) method}
+            \footnotesize \textcolor{red}{Include components using the add\_subsystem(name, component) method}
         \end{textblock*}
     
         \begin{textblock*}{4cm}(11cm,5.6cm)
@@ -603,7 +606,7 @@
         \draw[red, very thick, <-] (10.8,0.9) to (9,0.15);   % Right Arrow
        
     \begin{textblock*}{5cm}(8.3cm, 7.4cm)
-        \footnotesize \textcolor{red}{Mixing promotion with connect statements:allowed / appropriate}
+        \footnotesize \textcolor{red}{Mixing promotion with connect statements: allowed / appropriate}
     \end{textblock*}
 \end{frame}
 
@@ -655,14 +658,10 @@
         
         \item The \texttt{BreguetRange} component implements the electric Breguet equation: 
         
-        \begin{equation}
-          \small R_b= \frac{L}{D}\eta_e \eta_int \eta_p \frac{e_b}{g} \frac{m_b}{m_{TO}} 
-        \end{equation}
+          $$ \small R_b= \dfrac{L}{D}\eta_e \eta_int \eta_p \dfrac{e_b}{g} \dfrac{m_b}{m_{TO}} $$ 
         % \vspace{0.1cm}
         
-        \begin{equation}
-          \small m_TO = m_{empty} + m_{payload} + m_{battery}
-        \end{equation}
+          $$ \small m_{TO} = m_{empty} + m_{payload} + m_{battery} $$
         % \vspace{0.1cm}
         
         \item Your goal is to compute the maximum range of an airplane given a certain payload
@@ -983,9 +982,7 @@
 \begin{frame}{\small Newton’s Method is simple in one dimension (Gradient Based!)}
     \begin{columns}
         \column[T]{0.5\textwidth}
-            \begin{equation}
-                x_{n+1} = x_{n} - \frac{f(x_{n})}{f'(x_{n})}                    % Equation
-            \end{equation}
+                $$ x_{n+1} = x_{n} - \dfrac{f(x_{n})}{f'(x_{n})} $$                    % Equation
 
         \column[T]{0.5\textwidth}
         \begin{tikzpicture}
@@ -1075,7 +1072,7 @@
     % Begin the text descriptions of each equation
         \only<1>{
             \begin{textblock*}{5.5cm}(10cm, 6cm)
-                \small \textcolor{red}{Drive residuals to 0 x: design variables y: implicit state variables}
+                \small \textcolor{red}{Drive residuals to 0. x: design variables y: implicit state variables}
             \end{textblock*}
             \tikz[overlay]
                 \draw [red, very thick, ->] (1.9,-0.25) to (-2cm, -0.25);
@@ -1277,7 +1274,9 @@
 
 \begin{frame}{check partials output}
 
-\includegraphics[scale=0.25]{images/slide_67_image.PNG}
+\begin{figure}
+\includegraphics[scale=0.45]{images/slide_37_derivatives.PNG}
+\end{figure}
     
 \end{frame}
 
@@ -1432,28 +1431,28 @@
     
 \end{frame}
 
-% \begin{frame}{Finite difference is easy, but. . .} 
-% 
-% \begin{columns}
-%     \column[T]{0.5 \textwidth}
-%         \begin{itemize}
-%             \item Treats your model as a black-box
-%             \item Expensive
-%             \item Accuracy can be bad, especially close to the optimal point
-%         \end{itemize}
-% 
-%         \vspace{-0.5cm}
-% 
-%         \begin{equation*}
-%             \frac{\partial \textbf{F}}{\partial x_{j}} =\frac{ \textbf{F}(\textbf{x}+e_{j}h)-\textbf{F(x)}}{h} +\Theta (h)
-%         \end{equation*}
-% 
-%     \column[T]{0.5 \textwidth}
-%     \includegraphics[scale=0.3]{images/slide73.png}
-% 
-% \end{columns}
-% 
-% \end{frame}
+ \begin{frame}{Finite difference is easy, but. . .} 
+ 
+ \begin{columns}
+     \column[T]{0.5 \textwidth}
+         \begin{itemize}
+             \item Treats your model as a black-box
+             \item Expensive
+             \item Accuracy can be bad, especially close to the optimal point
+         \end{itemize}
+ 
+         \vspace{-0.5cm}
+ 
+         \begin{equation*}
+             \frac{\partial \textbf{F}}{\partial x_{j}} =\frac{ \textbf{F}(\textbf{x}+e_{j}h)-\textbf{F(x)}}{h} +\Theta (h)
+         \end{equation*}
+ 
+     \column[T]{0.5 \textwidth}
+     \includegraphics[scale=0.3]{images/slide73.png}
+ 
+ \end{columns}
+ 
+ \end{frame}
     
     
 \begin{frame}{Friends don’t let friends finite difference across solvers!}
@@ -1485,122 +1484,122 @@
 % ------------------------------------------
 % ------------------------------------------
 
-% \begin{frame}{Complex step is more accurate than FD, but}
-%     \begin{columns}
-%         \column[T]{0.5 \textwidth}
-%             \begin{itemize}
-%                 \item Treats your models as a gray-box (might require code modification
-%                 \item Even more expensive
-%                 \item some functions are tricky ...
-%                     \begin{itemize}
-%                         \item min(), max(), abs() can cause issues
-%                     \end{itemize}
-%             \end{itemize}
-% 
-%             \vspace{-0.5cm}
-% 
-%             \begin{equation*}
-%                 \frac{\partial \textbf{F}}{\partial x_{j}} =\frac{Im(\textbf{F}(\textbf{x}+ihe_{j}))}{h} +\Theta (h^{2})
-%             \end{equation*}
-% 
-%         \column[T]{0.5 \textwidth}
-%             \includegraphics[scale=0.27]{images/slide75.png}
-%     \end{columns}
-% 
-% \end{frame}    
+ \begin{frame}{Complex step is more accurate than FD, but}
+     \begin{columns}
+         \column[T]{0.5 \textwidth}
+             \begin{itemize}
+                 \item Treats your models as a gray-box (might require code modification)
+                 \item Even more expensive
+                 \item Some functions are tricky ...
+                     \begin{itemize}
+                         \item min(), max(), abs() can cause issues
+                     \end{itemize}
+             \end{itemize}
+ 
+             \vspace{-0.5cm}
+ 
+             \begin{equation*}
+                 \frac{\partial \textbf{F}}{\partial x_{j}} =\frac{Im(\textbf{F}(\textbf{x}+ihe_{j}))}{h} +\Theta (h^{2})
+             \end{equation*}
+ 
+         \column[T]{0.5 \textwidth}
+             \includegraphics[scale=0.27]{images/slide75.png}
+     \end{columns}
+ 
+ \end{frame}    
 
 
-% %---------------------------------------------------------------------%
-% %---------------------------------------------------------------------%
+ %---------------------------------------------------------------------%
+ %---------------------------------------------------------------------%
 
-% \begin{frame}{Analytic derivatives are both fast and accurate!}
-% \begin{columns}
-%     \column[T]{0.5 \textwidth}
-%         \includegraphics[scale=0.25]{images/slide76.png}
-% 
-%     \column[T]{0.5 \textwidth}
-%         \vspace{2cm}
-%         \begin{equation*}
-%             \frac{df}{dx} = \frac{\partial f}{\partial y_{b}} \frac{\partial y_{b}}{\partial y_{a}} \frac{\partial y_{a}}{\partial x}
-%         \end{equation*}
-% \end{columns}
-% 
-% \end{frame}
+ \begin{frame}{Analytic derivatives are both fast and accurate!}
+ \begin{columns}
+     \column[T]{0.5 \textwidth}
+         \includegraphics[scale=0.25]{images/slide76.png}
+ 
+     \column[T]{0.5 \textwidth}
+         \vspace{2cm}
+         \begin{equation*}
+             \frac{df}{dx} = \frac{\partial f}{\partial y_{b}} \frac{\partial y_{b}}{\partial y_{a}} \frac{\partial y_{a}}{\partial x}
+         \end{equation*}
+ \end{columns}
+ 
+ \end{frame}
 
-% %---------------------------------------------------------------------%
-% %---------------------------------------------------------------------%
+ %---------------------------------------------------------------------%
+ %---------------------------------------------------------------------%
 
-% \begin{frame}{What about models with coupling?}
-% \centering
-% \includegraphics[scale=0.25]{images/slide77.png}
-% 
-% \end{frame}
+ \begin{frame}{What about models with coupling?}
+ \centering
+ \includegraphics[scale=0.25]{images/slide77.png}
+ 
+ \end{frame}
 
-% %---------------------------------------------------------------------%
-% %---------------------------------------------------------------------%
+ %---------------------------------------------------------------------%
+ %---------------------------------------------------------------------%
 
-% \begin{frame}{How do you differentiate through this convergence loop? }
-% \begin{columns}
-%     \column[T]{0.4 \textwidth}
-%         \includegraphics[scale=0.2]{images/slide78.png}
-% 
-%     \column[T]{0.6 \textwidth}
-%         \begin{itemize}
-%             \item We'll need a nonlinear solver to converge this coupling
-%             \vspace{0.5cm}
-%             \item The solver loop changes the way you compute analytic derivatives
-%         \end{itemize}
-% \end{columns}
-% 
-% \end{frame}
+ \begin{frame}{How do you differentiate through this convergence loop? }
+ \begin{columns}
+     \column[T]{0.4 \textwidth}
+         \includegraphics[scale=0.2]{images/slide78.png}
+ 
+     \column[T]{0.6 \textwidth}
+         \begin{itemize}
+             \item We'll need a nonlinear solver to converge this coupling
+             \vspace{0.5cm}
+             \item The solver loop changes the way you compute analytic derivatives
+         \end{itemize}
+ \end{columns}
+ 
+ \end{frame}
 
-% %---------------------------------------------------------------------%
-% %---------------------------------------------------------------------%
-% \begin{frame}{Manually computing analytic derivatives for coupled models takes a lot of work}
-% \begin{columns}
-%     \column[T]{0.35 \textwidth}
-%         \includegraphics[scale=0.2]{images/slide79.png}
-% 
-%     \column[T]{0.65 \textwidth}
-% 
-%        \begin{equation*}
-%             \frac{df}{dx} = \frac{\partial f}{\partial y_{b}} \frac{\partial y_{b}}{\partial y_{a}} \frac{\partial y_{a}}{\partial x} + \frac{\partial f}{\partial y_{b}} \frac{\partial y_{b}}{dx} + \frac{\partial y_{b}}{dx} + \frac{\partial f}{\partial y_{a}} \frac{dy_{a}}{dx}
-%         \end{equation*}
-% \end{columns}
-% 
-% \end{frame}
+ %---------------------------------------------------------------------%
+ %---------------------------------------------------------------------%
+ \begin{frame}{Manually computing analytic derivatives for coupled models takes a lot of work}
+ \begin{columns}
+     \column[T]{0.35 \textwidth}
+         \includegraphics[scale=0.2]{images/slide79.png}
+ 
+     \column[T]{0.65 \textwidth}
+ 
+        \begin{equation*}
+             \frac{df}{dx} = \frac{\partial f}{\partial y_{b}} \frac{\partial y_{b}}{\partial y_{a}} \frac{\partial y_{a}}{\partial x} + \frac{\partial f}{\partial y_{b}} \frac{\partial y_{b}}{dx} + \frac{\partial y_{b}}{dx} + \frac{\partial f}{\partial y_{a}} \frac{dy_{a}}{dx}
+         \end{equation*}
+ \end{columns}
+ 
+ \end{frame}
 
-% %---------------------------------------------------------------------%
-% %---------------------------------------------------------------------%
+ %---------------------------------------------------------------------%
+ %---------------------------------------------------------------------%
 
-% \begin{frame}{How to compute these extra terms?}
-% \begin{columns}
-%     \column[T]{0.35 \textwidth}
-%         \includegraphics[scale=0.2]{images/slide79.png}
-% 
-%     \column[T]{0.65 \textwidth}
-% 
-%        \begin{equation*}
-%             \frac{df}{dx} = \frac{\partial f}{\partial y_{b}} \frac{\partial y_{b}}{\partial y_{a}} \frac{\partial y_{a}}{\partial x} + \frac{\partial f}{\partial y_{b}} \frac{\partial y_{b}}{dx} + \frac{\partial y_{b}}{dx} + \frac{\partial f}{\partial y_{a}} \frac{dy_{a}}{dx}
-%         \end{equation*}
-% 
-% 
-%     \begin{tikzpicture}[overlay, node distance=0m and 0 cm]
-%         \tikzstyle{red_box} = [rectangle, draw, red, very thick, minimum width=0.7cm, minimum height=1.4cm, align=center]
-%         \tikzstyle{text_box} = [rectangle, minimum width=1cm, minimum height=1cm, text justified]
-% 
-%         \node(text) [text_box, yshift=-2.5cm, xshift=4.5cm] {\textcolor{red}{These terms will be computed using adjoints!}};
-% 
-%         %  to shift red boxes, move only box 1, the lines will follow
-%         \node(box1) [red_box, above of=text,  node distance=3.7cm, xshift=2.2cm] {};
-%         \node(box2) [red_box, right of=box1,  node distance=2cm] {};
-% 
-%         \draw[red, thick] (text) -- (box1);
-%         \draw[red, thick] (text) -- (box2);
-% \end{tikzpicture}
-% \end{columns}
-% 
-% \end{frame}
+ \begin{frame}{How to compute these extra terms?}
+ \begin{columns}
+     \column[T]{0.35 \textwidth}
+         \includegraphics[scale=0.2]{images/slide79.png}
+ 
+     \column[T]{0.65 \textwidth}
+ 
+        \begin{equation*}
+             \frac{df}{dx} = \frac{\partial f}{\partial y_{b}} \frac{\partial y_{b}}{\partial y_{a}} \frac{\partial y_{a}}{\partial x} + \frac{\partial f}{\partial y_{b}} \frac{\partial y_{b}}{dx} + \frac{\partial y_{b}}{dx} + \frac{\partial f}{\partial y_{a}} \frac{dy_{a}}{dx}
+         \end{equation*}
+ 
+ 
+     \begin{tikzpicture}[overlay, node distance=0m and 0 cm]
+         \tikzstyle{red_box} = [rectangle, draw, red, very thick, minimum width=0.7cm, minimum height=1.4cm, align=center]
+         \tikzstyle{text_box} = [rectangle, minimum width=1cm, minimum height=1cm, text justified]
+ 
+         \node(text) [text_box, yshift=-2.5cm, xshift=4.5cm] {\textcolor{red}{These terms will be computed using adjoints!}};
+ 
+         %  to shift red boxes, move only box 1, the lines will follow
+         \node(box1) [red_box, above of=text,  node distance=3.7cm, xshift=2.2cm] {};
+         \node(box2) [red_box, right of=box1,  node distance=2cm] {};
+ 
+         \draw[red, thick] (text) -- (box1);
+         \draw[red, thick] (text) -- (box2);
+ \end{tikzpicture}
+ \end{columns}
+ 
+ \end{frame}
 
 %---------------------------------------------------------------------%
 %---------------------------------------------------------------------%
@@ -1796,7 +1795,7 @@
 	\lstinputlisting[language=Python]{SourceCodes/case_recorder_example.py}
 	\begin{tikzpicture}[overlay]
 		\draw[red, thick, ->] (13, 3) to (4.3, .77);
-		\draw[red, thick, ->] (13, 3) to (5, 3.2);
+		\draw[red, thick, ->] (13, 3) to (6, 3.2);
 	\end{tikzpicture}
 \end{frame}
 
@@ -1821,7 +1820,7 @@
 	\begin{columns}
 		\column[T]{.4 \textwidth}
 			\begin{itemize}
-				\item Find the thickness distribution for a cantilever beam that minizes compliance subject to a volumn constraint
+				\item Find the thickness distribution for a cantilever beam that minimizes compliance subject to a volume constraint
 				\item Check out the other examples on your own!
 			\end{itemize}
 		\column[T]{.6 \textwidth}
@@ -1838,12 +1837,12 @@
 	\begin{columns}
 		\column[T]{.55 \textwidth}
 			\begin{itemize}
-				\item \small Break the beam into segments (0 doesn't count as a real step!)
-				\item \small Compute each moment of inertia
-				\item \small Compute the local stiffness matrix for each segment
-				\item \small Combine all the local stiffness matrices into a global K matrix and solve the FEM
-				\item \small Pull displacements from the state vector and compute compliance
-				\item \small Compute beam volume
+				\item \small 0) Break the beam into segments (0 doesn't count as a real step!)
+				\item \small 1) Compute each moment of inertia
+				\item \small 2) Compute the local stiffness matrix for each segment
+				\item \small 3) Combine all the local stiffness matrices into a global K matrix and solve the FEM
+				\item \small 4) Pull displacements from the state vector and compute compliance
+				\item \small 5) Compute beam volume
 			\end{itemize}
 		\column[T]{.45 \textwidth}
 			\includegraphics[scale=0.38]{images/slide_105.png}
@@ -1854,11 +1853,11 @@
 
 	\uncover<2->{
 		\begin{tikzpicture}[overlay]
-			\draw[red, thick, ->] (6.75, 1.5) to (12, 3.4);
-			\draw[red, thick, ->] (6.75, 1.5) to (13.15, 3.7);
-			\draw[red, thick] (.5, .7) to (6.6, .7);
-			\draw[red, thick] (6.6, .7) to (6.6, 1.7);
-			\draw[red, thick] (6.6, 1.7) to (.5, 1.7);
+			\draw[red, thick, ->] (7.15, 1.5) to (12, 3.4);
+			\draw[red, thick, ->] (7.15, 1.5) to (13.15, 3.7);
+			\draw[red, thick] (.5, .7) to (7.1, .7);
+			\draw[red, thick] (7.1, .7) to (7.1, 1.7);
+			\draw[red, thick] (7.1, 1.7) to (.5, 1.7);
 			\draw[red, thick] (.5, 1.7) to (.5, .7);
 		\end{tikzpicture}
 	}
@@ -1869,14 +1868,14 @@
 		\column[T]{.5 \textwidth}
 			\begin{itemize}
 				\item \small Copy the "\texttt{lab\_2\_template.py}" file to a new file called "\texttt{lab\_2.py}"
-				\item \small Add components in the correct order (~line 40)
-				\item \small Connect the components together (~line 48)
+				\item \small Add components in the correct order (line 40)
+				\item \small Connect the components together (line 48)
 				\item \small Use the N2 diagram to make sure you have everything connected (no red inputs!)
 			\end{itemize}
 		\column[T]{.5 \textwidth}
 			\begin{itemize}
 				\item \small What happens if you switch to full model FD? Does it work? Try changing the FD step size...
-				\item \small What about complex step?
+				\item \small What about complex-step?
 				\item \small How does compute cost scale with \texttt{num\_elements} for different methods of computing derivatives?
 				\item \small What happens if you add the components in the incorrect order?
 			\end{itemize}
@@ -2015,12 +2014,325 @@
 	\end{itemize}
 \end{frame}
 
+\begingroup
+\setbeamercolor{background canvas}{bg=GreenYellow}
+\begin{frame}{Getting Derivatives in OpenMDAO}
+
+	\begin{itemize}
+		\item Hand-derived
+		\item Sparse hand-derived
+		\item Approximated (finite-difference or complex-step)
+		\item Compute the partials of the \textbf{\underline{residuals}} for an ImplicitComponent using the same techniques
+		\item Several examples in the docs
+	\end{itemize}
+
+\end{frame}
+\endgroup
+
+\begin{frame}{A simple ExplicitComponent example: Calculating lift from C\textsubscript{L}}
+
+		$$ \large L = \dfrac{1}{2} C_L \rho V^2 S_{ref} $$
+	
+\end{frame}
+
+\begin{frame}{You can analytically compute the partials by hand}
+
+	\begin{columns}
+		\column[T]{.5\textwidth}
+				$$ \large L = \frac{1}{2} C_L \rho V^2 S_{ref} $$
+		\column[T]{.5\textwidth}
+				$$ \small \dfrac{\partial L}{\partial V} = C_L \rho V S_{ref} $$ 
+				$$ \small \dfrac{\partial L}{\partial C_L} = \dfrac{1}{2} \rho V^2 S_{ref} $$
+				$$ \small \dfrac{\partial L}{\partial \rho} = \dfrac{1}{2} C_L V^2 S_{ref} $$
+				$$ \small \dfrac{\partial L}{\partial S_{ref}} = \dfrac{1}{2} C_L \rho V^2 $$
+	\end{columns}
+
+\end{frame}
+
+\begin{frame}{OpenMDAO can approximate partial derivatives for you}
+
+	\begin{itemize}
+		\item Can use the finite-difference or complex-step methods to approximate the partial derivatives
+		\item This is generally more computationally expensive than analytic derivatives
+		\item It requires very little additional programmer time
+	\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(0, 0)$) {\includegraphics[scale=.5]{images/slide_31_derivatives.png}};
+	
+	\begin{textblock*}{4cm}(9cm, 6.6cm)
+		\textcolor{white}{$ L = \dfrac{1}{2} C_L \rho V^2 S_{ref} $}
+	\end{textblock*}
+	
+\end{frame}
+
+\begin{frame}
+
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(0, -.6)$) {\includegraphics[scale=.525]{images/slide_32_derivatives.png}};
+	
+	\begin{textblock*}{15cm}(2cm, 8cm)
+		We tell OpenMDAO that all outputs depend on all inputs
+	\end{textblock*}
+	
+	\begin{tikzpicture}[overlay]
+		\draw[white, thick, ->] (8.3, -2.15) to (5.7, -2.15);
+	\end{tikzpicture}
+	
+\end{frame}
+
+\begin{frame}{The Jacobian is a matrix with one row for each output, and one column for each input}
+
+	$$
+	[J] = 
+	\begin{bmatrix}
+		\frac{\partial L}{\partial V} & \frac{\partial L}{\partial C_L} & \frac{\partial L}{\partial \rho} & \frac{\partial L}{\partial S_{ref}}
+	\end{bmatrix}
+	$$
+
+\end{frame}
+
+\begin{frame}{But each entry in that matrix is really a sub-matrix!}
+
+	\begin{itemize}
+		\item Each input is really a vector
+		\item Each output is really a vector
+		\item Each entry of the vector is totally separate from all others
+		\item So each partial is really a square matrix, with entries only on the diagonal
+	\end{itemize}
+	$$
+	[J] = 
+	\begin{bmatrix}
+		\frac{\partial L}{\partial V} & \frac{\partial L}{\partial C_L} & \frac{\partial L}{\partial \rho} & \frac{\partial L}{\partial S_{ref}}
+	\end{bmatrix}
+	$$
+	
+\end{frame}
+
+\begin{frame}{But each entry in that matrix is really a sub-matrix!}
+
+	$$
+	\large [J] = 
+	\begin{bmatrix}
+		\frac{\partial L}{\partial V} & \frac{\partial L}{\partial C_L} & \frac{\partial L}{\partial \rho} & \frac{\partial L}{\partial S_{ref}}
+	\end{bmatrix}
+	$$	
+	
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(3.25, 3.0)$) {\includegraphics[scale=.24]{images/slide_35a_derivatives.png}};
+		
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(.75, 3.0)$) {\includegraphics[scale=.24]{images/slide_35b_derivatives.png}};
+	
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(-1.75, 3.0)$) {\includegraphics[scale=.24]{images/slide_35c_derivatives.png}};
+				
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(-3.75, 3.0)$) {\includegraphics[scale=.24]{images/slide_35d_derivatives.png}};
+	
+	\begin{tikzpicture}[overlay]
+		\draw[red, thick, ->] (3.75, 1) to (6, 3);
+		\draw[red, thick, ->] (6.25, 1) to (7, 3);
+		\draw[red, thick, ->] (8.75, 1) to (8, 3);
+		\draw[red, thick, ->] (10.75, 1) to (9, 3);
+	\end{tikzpicture}
+	
+\end{frame}
+
+\begin{frame}
+
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(0, 0)$) {\includegraphics[scale=.475]{images/slide_36_derivatives.png}};
+	
+	\begin{textblock*}{8cm}(7.25cm, 4.5cm)
+		\textcolor{white}{\footnotesize Give OpenMDAO the expressions for partial derivatives we computed before \newline \newline Account for the 			shape of the 	Jacobian}
+	\end{textblock*}
+	
+\end{frame}        
+
+\begin{frame}{Sparse partial derivatives can greatly increase speed}
+
+	We saw an 80x speed-up by using sparse Jacobians intelligently in OpenAeroStruct \newline \newline
+	
+	\begin{figure}
+		\includegraphics[scale=.5]{images/slide_38_derivatives.png}
+	\end{figure}
+	
+\end{frame}   
+
+\begin{frame}{Since each partial is diagonal, we don't actually need to provide all those 0's}
+
+	$$
+	\large [J] = 
+	\begin{bmatrix}
+		\frac{\partial L}{\partial V} & \frac{\partial L}{\partial C_L} & \frac{\partial L}{\partial \rho} & \frac{\partial L}{\partial S_{ref}}
+	\end{bmatrix}
+	$$	
+	
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(3.25, 3.0)$) {\includegraphics[scale=.24]{images/slide_35a_derivatives.png}};
+		
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(.75, 3.0)$) {\includegraphics[scale=.24]{images/slide_35b_derivatives.png}};
+	
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(-1.75, 3.0)$) {\includegraphics[scale=.24]{images/slide_35c_derivatives.png}};
+				
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(-3.75, 3.0)$) {\includegraphics[scale=.24]{images/slide_35d_derivatives.png}};
+	
+	\begin{tikzpicture}[overlay]
+		\draw[red, thick, ->] (3.75, 1) to (6, 3);
+		\draw[red, thick, ->] (6.25, 1) to (7, 3);
+		\draw[red, thick, ->] (8.75, 1) to (8, 3);
+		\draw[red, thick, ->] (10.75, 1) to (9, 3);
+	\end{tikzpicture}
+	
+\end{frame}     
+
+\begin{frame}{Since each partial is diagonal, we don't actually need to provide all those 0's}
+
+	$$
+	\large [J] = 
+	\begin{bmatrix}
+		\frac{\partial L}{\partial V} & \frac{\partial L}{\partial C_L} & \frac{\partial L}{\partial \rho} & \frac{\partial L}{\partial S_{ref}}
+	\end{bmatrix}
+	$$	
+	
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(3.25, 3.0)$) {\includegraphics[scale=.24]{images/slide_40a_derivatives.png}};
+		
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(.75, 3.0)$) {\includegraphics[scale=.24]{images/slide_40b_derivatives.png}};
+	
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(-1.75, 3.0)$) {\includegraphics[scale=.24]{images/slide_40c_derivatives.png}};
+				
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(-3.75, 3.0)$) {\includegraphics[scale=.24]{images/slide_40d_derivatives.png}};
+	
+	\begin{tikzpicture}[overlay]
+		\draw[red, thick, ->] (3.75, 0.5) to (6, 3);
+		\draw[red, thick, ->] (6.25, 0.5) to (7, 3);
+		\draw[red, thick, ->] (8.75, 0.5) to (8, 3);
+		\draw[red, thick, ->] (10.75, 0.5) to (9, 3);
+	\end{tikzpicture}
+	
+\end{frame} 
+
+\begin{frame}
+
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(0, 0)$) {\includegraphics[scale=.52]{images/slide_41_derivatives.png}};
+		
+	\begin{textblock*}{10cm}(6.5cm, 7.5cm)
+		\textcolor{white}{\footnotesize Tell OpenMDAO about the sparsity pattern of the Jacobian}
+	\end{textblock*}
+	
+	\begin{tikzpicture}[overlay]
+		\draw[white, thick, ->] (13, -3.1) to (10, -3.1);
+	\end{tikzpicture}
+
+\end{frame}     
+
+\begin{frame}
+
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(0, 0)$) {\includegraphics[scale=.52]{images/slide_42_derivatives.png}};
+		
+	\begin{textblock*}{4.5cm}(9cm, 5.0cm)
+		\textcolor{white}{\footnotesize Because our expected partials shapes are vectors, now we're just giving OpenMDAO the non-zero entries}
+	\end{textblock*}
+
+\end{frame}      
+
+\begin{frame}{What if we're too lazy to compute the partials by hand?}
+
+	$$
+	\large [J] = 
+	\begin{bmatrix}
+		\frac{\partial L}{\partial V} & \frac{\partial L}{\partial C_L} & \frac{\partial L}{\partial \rho} & \frac{\partial L}{\partial S_{ref}}
+	\end{bmatrix}
+	$$	
+	
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(3.25, 3.0)$) {\includegraphics[scale=.24]{images/slide_35a_derivatives.png}};
+		
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(.75, 3.0)$) {\includegraphics[scale=.24]{images/slide_35b_derivatives.png}};
+	
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(-1.75, 3.0)$) {\includegraphics[scale=.24]{images/slide_35c_derivatives.png}};
+				
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(-3.75, 3.0)$) {\includegraphics[scale=.24]{images/slide_35d_derivatives.png}};
+	
+	\begin{tikzpicture}[overlay]
+		\draw[red, thick, ->] (3.75, 1) to (6, 3);
+		\draw[red, thick, ->] (6.25, 1) to (7, 3);
+		\draw[red, thick, ->] (8.75, 1) to (8, 3);
+		\draw[red, thick, ->] (10.75, 1) to (9, 3);
+	\end{tikzpicture}
+	
+\end{frame}    
+
+\begin{frame}
+
+	\tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(0, 0)$) {\includegraphics[scale=.49]{images/slide_44_derivatives.png}};
+		
+	\begin{textblock*}{4.5cm}(9.3cm, 6.0cm)
+		\textcolor{white}{\footnotesize OpenMDAO can approximate derivatives automatically. \newline Just note that they will be dense!}
+	\end{textblock*}
+	
+	\begin{tikzpicture}[overlay]
+		\draw[white, thick, ->] (11, -.6) to (7.6, -.6);
+	\end{tikzpicture}
+
+\end{frame}           
+
+\begin{frame}{When do we need to use implicit components?}   
+
+	\begin{itemize}
+		\item For computations where there is not an explicit analytic solution, such as CFD or FEA analyses or $$ \cos{x*y} - z*y = 0 $$
+		\item The states are your outputs and you compute residuals for them instead of their analytic solution
+		\item Implicit componenets always require a solver
+	\end{itemize}
+	\url{http://openmdao.org/twodocs/versions/latest/advanced_guide/implicit_comps/defining_icomps.html}
+	
+\end{frame}  
+
+\begin{frame}{Implicit components can use any of the derivative techniques described previously}
+
+	\begin{itemize}
+		\item Hand derived analytic partials (sparse or dense!)
+		\item Finite-difference or complex-step dense approximations
+	\end{itemize}
+
+\end{frame}     
+
+\begin{frame}{Example implicit component: Aircraft in flight equilibrium}
+
+	\begin{columns}
+		\column[T]{.6\textwidth}
+			\includegraphics[scale=.46]{images/slide_49_derivatives.png}
+		\column[T]{.4\textwidth}
+				$$ F_T \cos{\alpha} - D - W \sin{\gamma} = 0 $$
+				$$ F_T \sin{\alpha} + L - W \cos{\gamma} = 0 $$
+	\end{columns}
+
+\end{frame}
+
+\begin{frame}{OpenMDAO docs have a great amount of details and examples}
+
+	\begin{columns}
+		\column[T]{.5\textwidth}
+			Search bar is a lifesaver
+			\newline \newline \newline \newline \url{http://openmdao.org/twodocs/versions/latest/features/core_features/working_with_derivatives/index.html}
+		\column[T]{.5\textwidth}
+			\includegraphics[scale=.37]{images/slide_24_derivatives.png}
+	\end{columns}
+
+\end{frame}
+
+\begin{frame}{OpenMDAO docs have a great amount of details and examples}
+
+	\begin{figure}
+		\includegraphics[scale=.4]{images/slide_25_derivatives.png}
+	\end{figure}
+	\url{http://openmdao.org/twodocs/versions/latest/features/core_features/working_with_derivatives/index.html}
+	
+\end{frame}
+
 \begin{frame}{Advanced Topics}
 	\begin{itemize}
 		\item Model architecting
 		\item Vectorization
 		\item Implicit components
-		\item Getting system derivatives efficiently
+		\item Total derivative coloring
+		\item Debugging derivative computations
 		\item High-fidelity and expensive tools
 		\item Debugging tools and processes
 		\item Surrogate modeling
@@ -2039,7 +2351,7 @@
 				\item a few computations that are logically related
 			\end{itemize}
 		\item Python's package import system makes this easy
-		\item Real\-world examples:
+		\item Real-world examples:
 			\begin{itemize}
 				\item \url{https://github.com/mdolab/OpenConcept}
 				\item \url{https://github.com/mdolab/OpenAeroStruct}
@@ -2104,24 +2416,20 @@
 
 \end{frame}
 
-\begin{frame}{Implicit Components}
-	\begin{itemize}
-		\item Useful for computations where there isn't an easily written explicit expression
-			\begin{itemize}
-				\item y is a state and x, z are inputs: \[ \cos(x * y) - x * y = 0 \] 
-				\item CFD or FEA analyses
-			\end{itemize}
-		\item You compute the residuals for the states instead of the outputs directly
-		\item Implicit components always require a solver
-	\end{itemize}
-	\url{http://openmdao.org/twodocs/versions/latest/advanced_guide/implicit_comps/defining_icomps.html}
+\begin{frame}{Automatic coloring for real problems can be extremely beneficial}
+
+	\begin{columns}
+		\column[T]{.5\textwidth}
+			Designers don't need prior knowledge about the sparsity of their optimization problem to use total coloring
+		\column[T]{.5\textwidth}
+			\includegraphics[scale=.37]{images/slide_55_derivatives.png}
+	\end{columns}
 \end{frame}
 
-\begin{frame}{Getting system derivatives efficiently: automatic Jacobian coloring}
-	\begin{figure}
-		\includegraphics[scale=0.3]{images/slide_120.png}
-	\end{figure}
-	\url{http://openmdao.org/twodocs/versions/latest/features/core_features/working_with_derivatives/simul_derivs.html}
+\begin{frame}{Visual debugging tools for partial derivatives are helpful for sparse patterns}
+	
+	\includegraphics[scale=.5]{images/slide_56_derivatives.png}
+
 \end{frame}
 
 \begin{frame}{Getting system derivatives efficiently: automatic Jacobian coloring}
@@ -2203,11 +2511,11 @@
 	\end{figure}
 \end{frame}
 
-\begin{frame}
+\begin{frame}{Trajectory optimization}
 	\begin{columns}
 		\column[T]{.5 \textwidth}
 			\begin{itemize}
-				\item \textit{Dymos} is a tool build using OpenMDAO that solves optimal control problems involving multidisciplinary systems
+				\item \textit{Dymos} is a tool built using OpenMDAO that solves optimal control problems involving multidisciplinary systems
 				\item Example optimal trajectory for an aircraft climb shown on right
 			\end{itemize}
 			\url{http://github.com/openmdao/dymos}
@@ -2241,8 +2549,19 @@
 			\begin{itemize}
 				\item Lab 3: Wrapping external codes as explicit and implicit components
 			\end{itemize}
+		\item Getting derivatives in OpenMDAO
 		\item Advanced topics
 	\end{itemize}
+\end{frame}
+
+\begin{frame}{Thank you!}
+
+    \tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(0,1.1)$) {\includegraphics[scale=.35]{images/slide_135.png}};
+
+    \tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(4,3.3)$) {\includegraphics[scale=0.4]{images/michigan_aerospace.png}};
+
+    \tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(-4,3.25)$) {\includegraphics[scale=0.4]{images/NTNU_logo.png}};
+
 \end{frame}
 
 \begin{frame}{Thank you!}
@@ -2251,17 +2570,6 @@
 	\url{engopt-join@mdolab.engin.umich.edu}
 	\newline
 	\url{http://mdolab.engin.umich.edu/}
-
-    \tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(4,3.3)$) {\includegraphics[scale=0.4]{images/michigan_aerospace.png}};
-
-    \tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(-4,3.25)$) {\includegraphics[scale=0.4]{images/NTNU_logo.png}};
-
-\end{frame}
-
-
-\begin{frame}{Thank you!}
-
-    \tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(0,1.1)$) {\includegraphics[scale=.35]{images/slide_135.png}};
 
     \tikz[remember picture, overlay] \node[anchor=center] at ($(current page.center)-(4,3.3)$) {\includegraphics[scale=0.4]{images/michigan_aerospace.png}};
 
