@@ -18,7 +18,7 @@ class ConnectExample(Group):
 		self.connect('indeps.U','lift.U')
 
 if__name__=="__main__":
-	prop = Problem()
+	prob = Problem()
 	prob.model = ConnectExample()
 	prob.setup()
 	prob['indeps.U'] = 150.
